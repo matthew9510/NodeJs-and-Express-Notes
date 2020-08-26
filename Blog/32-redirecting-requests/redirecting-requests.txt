@@ -1,0 +1,8 @@
+Lets do something when someone clicks the button and sends a post request to /message.
+
+Lets add another if statement to check if the url is equal to '/message' and also to check that we are not handling a GET request.
+If this if statement gets triggered lets redirect the user to the root '/' as well as create a new file and store the message in it. 
+
+After writing to a file we will use a method on res called writeHead which will allow us to write a bunch of meta information in one go. We can set the status code of 302, which stands for redirection. We will then pass in a javascript object with some headers we want to send.
+The key of the header we want to use is 'Location' which is the route to redirect to. 
+Then return a res.end() so we stop the anonymous function 

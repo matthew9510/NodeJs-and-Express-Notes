@@ -1,0 +1,4 @@
+req.body is not parsed by express. We will need to do this by installing and importing 
+body-parser into the project and also adding it to middleware. 
+
+We will typically add this middleware before the route handling middleware.

@@ -1,0 +1,14 @@
+Response object
+If we log this object you will see that it doesn't hold any interesting data.
+Instead we can use it to fill it with data we want to send back. 
+
+res.setHeader() - this will allow us to set a new header.
+For example the key 'Content-Type' can have a value of 'text/html'. This will attach a header to our response where we basically pass some meta information along with the response. There are only a few supported headers that can be set, check this link for the documentation  https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers.
+
+Now after we set the header to have the key 'Content-Type' and value 'text/html' we need to actually attach that data to the response body. 
+We will use the write() method, which will allow us to write some data to the response. You can see this as working in chunks, or in multiple lines. You write multiple lines of response and essentially attach them in the end, or written to the response line by line.
+We then need to tell node that we're done once we are done with creating that response, with creating a response with a method called end().
+Once we call the end method we must not write anymore as it will create an error because we must not change the response once we have called the end method because that is when send our response back to the client.
+
+If we didn't set the header with the Content-Type the browser would not know that it was html code. 
+

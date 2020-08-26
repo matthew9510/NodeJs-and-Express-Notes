@@ -1,0 +1,25 @@
+One thing to note is that the order execution of this code is not necessarily in the order in which you write it.
+For example writing to the file will execute after sending the response back to the client.
+
+Two things to note.
+1. This does not mean the our event listeners are dead, they will still execute after the response is gone.  
+2. This also means that if we do something in the event listener callback function that should influence in the response then we would need to then move setting up and sending back the response inside of the event listener callback function if we have a dependency.
+
+It's really important to know that code such as .on() and .createServer() these are some examples wehere nodejs uses a pattern where you pass a function to a function and node will execute these passed in functions at a later point of time which is called asynchronously.
+In these cases node will not run the function immediately, instead it will add this event listener internally, node manages these listeners internally.
+i.e. for the 'end' event on the request which will be triggered automatically once nodeJs is done parsing the request. It will then call that function for us once it is done.
+
+We can think of this like nodeJs having an internal registry of events and listeners to these events. A function passed in as the second argument of the on method is the listener.
+When something happens, when nodeJs is done parsing the request, it will go through the registry and see and say "I'm done with the request so I should now send the end events. So lets see which listeners I have for that event and then it will then find all the functions it might have registered and will now call/invoke them. 
+Note that while it is doing this it will not pause the other code execution.
+So when we actually have a dependency with setting up the response and sending it back in this event listener it is important to note that the next line underneath it will execute because the return statement is in the event listener and doesn't get executed right away.
+Therefore the return statement won't be called and the overall callback function inside the createServer method will not terminate. Instead it registers this callback and immediately moves onto the next lines. It would eventually execute the this return statement line, but at that point it's already too late, which is why we get an error 'Cannot set headers after they are send to the client.", because it already moved along and executed the code below. When all of a sudden the parsing of the request finished and it executed the callback function and tried to again send a response which is too late be cause the response was already sent. 
+
+The fact that  you can register code functions which run sometime in the future but not necessarily right now is a crucial concept.
+And therefore the next line of code this code here can run or will run before the listener function is executed simply because it is just a callback to be called sometime in the future.
+This set up is important because otherwise node would have to pause until it's done pause until it wrote the file and if it does that it will simply slow our server down and it's not able to handle
+our incoming requests or do anything of that kind until it's done, and that is not what we want. We don't want to block our code execution.
+We always want to be in that wait for new events loop, the event loop, and then only execute code once it's to be executed and never block that event loop for too long of a time.
+And this is why we have this setup. 
+
+To avoid code execution to continue we will return request.on(), the event handler so that the lines after don't get executed. 

@@ -1,0 +1,15 @@
+When we created our node server in the last lecture we noticed that our app didn't stop running. 
+
+The reason for this is an important concept in nodejs called the event-loop.
+
+The event loop is basically a loop process managed by nodejs which keeps running as long as there is work to do.  
+It will keep on running as long as there are event listeners registered. One listener we did register and 
+never unregistered was the incoming request listener (an ongoing event listener).
+We shouldn't unregister this because our server should stay up and running. 
+
+Our core node application is managed by this event loop, all our code is managed by this.
+Nodejs uses this pattern because it actually executes single threaded javascript. The entire node process basically uses one thread on our computer it's running on.
+Our nodejs server should of course be able to handle multiple, thousands, tens of thousands or hundreds of thousands of incoming requests and if it would always pause and then do something with that request, this would not be that great. Hence why it uses this event loop concept where in the end it always keeps on running and just executes code when a certain event occurs, so that in general it's always available.
+If you get two incoming requests, nodejs will have to handle these two events, and while it's super fast in handling these requests, behind the scenes it actually does multi-threading by leveraging the operating system.
+
+You can end this event loop process by calling 'process.exit'

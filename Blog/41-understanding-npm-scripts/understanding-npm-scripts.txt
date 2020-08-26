@@ -1,0 +1,16 @@
+We can write scripts to handle writing 'node app.js' every time. 
+We will need o use npm - node package manager, already installed with node js
+
+We can use npm to initialize our node project. 
+
+'npm init' - sets up the package
+
+with the package.json file we can add  "start": "node app.js", to the scripts object. 
+
+No blanks or whitespaces allowed in naming convention for json keys
+
+start is a special script where you can run by typing this in the terminal - "npm start" 
+
+Other scripts you write can run by typing "npm run script-name"
+
+

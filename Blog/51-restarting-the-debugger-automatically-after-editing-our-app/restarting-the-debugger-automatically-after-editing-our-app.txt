@@ -1,0 +1,14 @@
+Debug > open configuration > nodejs
+
+Add this to the configurations array object:
+   "restart": true,
+    "runtimeExecutable": "nodemon",
+    "console":"integratedTerminal"
+
+We will see an error because nodemon is not installed globally. So go install it globally running the following command: "npm i nodemon -g"
+If we make changes it restarts the debugger and node and these are two seperate processes.
+If you stop the debugger, nodemon has to quit separately by you typing ctrl+c.  
+
+Note we have to use the terminal now not the debug terminal due to our changes. 
+
+https://code.visualstudio.com/docs/nodejs/nodejs-debugging

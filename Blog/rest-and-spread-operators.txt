@@ -1,0 +1,67 @@
+Spread operator:
+
+If we want to implement a pattern where when we add a new element to an old array but we don't want to edit the original array. When we do this we can create a new array with the 
+old values and the newer values. This follows a patteren called immutability where we never edit existing values but where we always replace them with copies plus the changes.
+
+var array1 = [1, 2, 3];
+var array2 = [...array1, 4, 5];
+
+array1.push(6);
+
+console.log(array1); // outputs [1, 2, 3, 6]
+console.log(array2); // outputs [1, 2, 3, 4, 5]
+
+The spread operator pulls out the array1 elements and add them one by one to the new array.
+
+This works with objects as well. We can pull all the elements from the object being copied and we add it to the new object.
+
+var person = {
+    name: "Matt",
+    age: 23
+}
+
+var copiedPerson = {...Person}
+
+person.name = "Marc"
+console.log(person)
+console.log(copiedPerson)
+
+Note that nested objects and arrays work differently due to them being reference types not primitive types 
+var employee = {
+    name: "Matt",
+    age: 23,
+    payStubs: [3000,3000,3000,3000]
+}
+
+var copiedEmployee = {...employee};
+employee.name = "Marc"
+employee.payStubs.push(4000);
+console.log(employee) // Outputs { name: 'Marc', age: 23, payStubs: [ 3000, 3000, 3000, 3000, 4000 ] }
+console.log(copiedEmployee) // Outputs { name: 'Matt', age: 23, payStubs: [ 3000, 3000, 3000, 3000, 4000 ] }
+
+
+
+Rest operator:
+
+We can bind multiple arguments passed in to a function to an It is flexible because you don't have to specify how many arguments will be passed in. It doesn't matter how many arguments are passed in.
+The rest operator will take all the arguments and bundle them up in an array for us. 
+
+const toArray = (...args) => {
+    return args;
+}
+
+console.log(toArray(1, 2, 3, 4)) // this works
+console.log(toArray(1, 2, 3, 4, 5)) // and this works
+
+versus 
+
+const toArrayNotFlexible = (arg1, arg2, arg3, arg4) => {
+    return [arg1, arg2, arg3, arg4]
+} 
+console.log(toArrayNotFlexible(1,2,3,4)) // This will work 
+console.log(toArrayNotFlexible(1,2,3,4)) // This will not work 
+
+
+The syntax is the same but it's the place where you use this syntax that defines how you call it.
+spread operator - using it to pull elements or properties out of arrays or objects 
+rest opertaor - using it to merge multiple arguments into an array and you use it in an argument list of a function 

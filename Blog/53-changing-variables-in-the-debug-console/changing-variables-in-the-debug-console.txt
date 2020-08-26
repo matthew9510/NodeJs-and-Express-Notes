@@ -1,0 +1,1 @@
+You can go to debug view and double click a variable and change the variable value. Note though that this will not save permanently to the file, rather it's temporary for the current debugger execution.

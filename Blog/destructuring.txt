@@ -1,0 +1,34 @@
+var person = {
+    name: "Matt",
+    age: 23
+}
+
+// takes in whole person object
+const printName = (personData) => {
+    console.log(personData.name)
+}
+
+printName(person)
+
+Instead of doing this we can use a feature called object destructuring where the syntax specifies that we add curly braces in the argument list and we specify the property of the incoming object we are interested in. 
+Note the other unspecified properties will be dropped and the specified properties will be stored in a local variable with the same name as the property that can be used in the function. 
+
+const printName = ({ name }) => {
+    console.log(name)
+}
+printName(person)
+
+You can use this feature outside of a function as well
+
+const {} = person;
+The curly braces on the left of the equals sign specifies we are going to deconstruct an object. We can then specify the properties we want to store in variables in the relevant scope from the object, note they must be the same variable names as the properties of the object.  
+
+
+We can also deconstruct arrays.
+names = ["Marc", "Matt"]
+const [name1, name2] = names;
+
+Note that the variables name1 and name2 must be wrapped inside square brackets. Also note that when we do this name1 and name2 are not stored in an array, they are variables accessbale in the relevant scope now.
+
+
+

@@ -1,0 +1,5 @@
+JavaScript is:
+- Weakly Typed, No explicit typed assignment. It doesn't force you to define what type you are using, and you can also switch a variables type dynamically
+- Object-orientated, data can be organized in logical objects, can be primitive and reference types
+- versatile, Runs in a browser and directly on a PC/Server. You can also perform a broad variety of tasks. The browser can listen to user events, re-render the DOM and on a server or Pc, you can work with files with databases. 
+

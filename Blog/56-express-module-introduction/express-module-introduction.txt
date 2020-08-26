@@ -1,0 +1,10 @@
+With nodejs you have to write a lot of code to extract the body of an incoming request. 
+i.e. converting the body of a post to use it, using event listeners and buffers.
+We don't want to do that, we want to focus more on the business logic, we don't want to worry about
+care about standard tasks like handling incoming requests or routing, i.e. executing different 
+code for different paths, different urls. We don't want to do this. So we turn to express.
+
+Express will help us outsource some of this tedious work.
+
+It gives you a rule set in which you work and a lot of utility functions that help you write cleaner
+code and focus on your core business.

@@ -1,0 +1,36 @@
+app.use() has method overloads. 
+
+One way to call the method is by passing a path as a first argument and a callback as the second
+argument.
+
+app.use('/', (req, res, next) => {
+
+})
+
+The first argument is an optional path OR MULTIPLE paths. It allows us to filter our certain requests,
+however this works a bit different than out if statements.
+Then we have a callback and we can have as many callbacks as we want. 
+
+So we can add a path at the beginning, for example just slash, this however is the default by the
+way and now we would handle this for just visiting slash right. If I reload, we still see hello
+from express. Now what happens if I for example enter /add-product? We still see hello from express
+and we still see I'm in another middleware being console logged, so this middleware gets executed
+for both slash and add product BECAUSE THIS DOES NOT MEAN THAT THE FULL PATH, OS THE PART AFTER THE 
+DOMAIN HAS TO BE A SLASH BUT RATHER THAT IT HAS TO START WITH THAT. WE SHOULD THEN MAKE SURE WE HAVE 
+THE MORE SPECIFIC MIDDLEWARE FIRST. Now of course every route starts
+with just a slash and then we have different other criteria. So what we can do is we can simply 
+duplicate this middleware function and add it before this other middleware and add /add-product as
+the path. Now why before this middleware and not after it? Because remember, the request goes
+through the file from top to bottom and if we don't call next, it's not going to the next 
+middleware. Well I am not calling next here, so in the end if we have /add-product, this middleware
+will be reached first because top to bottom, add product will match this middleware and since I 
+don't call next, this middleware will never get a chance of handling that request even though
+the filter here would have well, matched that request too.
+
+Note: If you send a response never call next as well because you don't want to execute an other
+response related code. This will result in an error.
+
+If we have a middleware that should be applied to all requests, we would simply add it on top of
+all the other middlewares. If we don't add a filter or a filter that matches all requests (i.e. '/' path) it 
+should match, then this middleware will always run first and if we call the next function, 
+well then of course the request will also be able to continue.

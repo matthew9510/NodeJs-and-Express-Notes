@@ -1,0 +1,19 @@
+If we don't call next if we don't send a response , the request will die and will not continue
+to the next middleware.
+
+Expressjs doesn't send a default response or anything like that, so instead we should send a 
+response in the last middleware. So we can use the response object and now sending responses
+actually gets easier, thanks to expressjs.
+Instead of setting a header (setHeader) and writing, although we could still do this, we can
+use a new utility function called send(). Send allows us to send a response. This allows us to
+attach a body of type any. The send method automatically sets the content-type to text/html 
+by default. You can still set a header manually with setHeader(). Using send is easier because
+we don't have to use a bunch of the write methods, we can also send whole files!
+
+Middleware Overview: 
+We add functions that are hooked in a funnel which the request goes through any you either
+invoke next to reach the next middleware or you send a response to not do anything else.
+
+Note: If you send a response back you would not go to the next middleware. 
+
+

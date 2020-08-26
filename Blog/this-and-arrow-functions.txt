@@ -1,0 +1,5 @@
+This can be a tricky subject. I think it's best to just watch the video opposed to me explaining it because Maximilian does such a great job at
+explaining this tricky subject. 
+
+References: 
+https://academind.com/learn/javascript/this-keyword-function-references/

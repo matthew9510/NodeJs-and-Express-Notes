@@ -1,0 +1,8 @@
+
+req has a few important properties we should understand
+
+req.url - shows which url was hit
+req.method - shows the type of http method was requested  
+req.headers - shows metadata about the request
+
+This is how we can access information about a request

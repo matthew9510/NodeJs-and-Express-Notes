@@ -1,0 +1,4 @@
+Instead of setting up a server and passing app to the createServer() method we can do this
+by just calling .listen() on the app instance itself. 
+
+app.listen(3000) will do both of these things. Now we can also remove the http import.

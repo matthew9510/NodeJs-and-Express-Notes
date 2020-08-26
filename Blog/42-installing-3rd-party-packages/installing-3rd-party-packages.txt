@@ -1,0 +1,15 @@
+We will install a 3rd party package to restart the server automatically when we save changes
+
+we do this by typing "npm install nodemon --save "
+
+Installation flags: 
+--save -> for poduction dependency
+--save-dev -> for development dependency
+-g -> WILL NOT INSTALL ON PROJECT but will install globally on your computer
+
+
+If a dependency version has a '^' carrot and you run "npm install" it will go through our packages and update to the latest version if possible 
+
+These packages are stored in node_modules folder. Note that nodemon has peer dependencies that will also be installed and added to the node_modules folder as well.
+
+package-lock.json saves the version's you have installed so if you work with someone they can aso work with the same versions as you are. 

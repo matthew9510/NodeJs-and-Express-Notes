@@ -1,0 +1,64 @@
+Let us create a file to hold the routing logic
+
+We can clean our current code up by moving the routing logic to another file called routes.js 
+We need a way to connect app.js to routes.js
+we need a way to send the request inside app.js to this routes.js file.
+
+Using module.exports.
+module is another keyword or object which is exposed globally to you by nodejs which has an exports
+property and we can assign a value to this, like our request handler, so this constant which holds
+this function, it's now stored in module exports. Since this is a global object exposed by node, 
+node is actually able to work with this and we can now import from that routes.js file by requiring it 
+and node will look for module exports.
+Since this is now not a global module, we don't just type the name of the file, instead we want to add a
+local path to it with ./ and you can omit .js because nodejs will automatically attach this at the end.
+You can add it though if you want. 
+
+Now node will go ahead and look for that file in the same folder as app.js which it will find and in that file,
+it will look for module exports and see what's registered in there. Since we exported a function we can use that 
+and we'll store it in a constant because what ever is exported from that file will be stored inside of that constant.
+Now inside of app.js we can use that function as our handler. We won't execute instead we will just pass the name telling 
+node to execute the function thats store in routes for the incoming requests.
+
+We have one file that just spins up a server but it's important to know that it creates a connection to another file 
+through the import and export. It's important to note that the nodes module system is that the file content is cached by node 
+and we can not edit it externally. So if we exported an object and we tried to add a new property on the fly, it wouldn't manipulate the original
+file. So it is basically locked and not accessible outside. We can only export stuff that we can read from outside. Though you can have functions that 
+change content inside of that file. 
+
+You can export multiple things from a file. You do this by exporting an object with multiple key value pairs.
+This is how you can group things and have one export which is all you can have. 
+Then you would specify which property you would want to use off of the constant that holds the exported object.
+
+Another way to do it is explicitly set multiple properties on the module.exports object. 
+
+We can also omit module and just leave exports. 
+
+
+Examples:
+
+module.exports = someFunctionReference
+const routes = require('./routes')  //routes is the someFunctionReference
+
+---
+
+module.exports = {
+    handler: someFunctionReference,
+    someText = "some Hard Coded Text"
+}
+const routes = require('./routes')
+console.log(routes.someText)
+
+
+---
+
+module.exports.handler = someFunctionReference
+module.exports.someText = "someHardCodedText"
+const routes = require('./routes')
+console.log(routes.someText)
+---
+
+exports.handler = someFunctionReference
+exports.someText = "someHardCodedText"
+const routes = require('./routes')
+console.log(routes.someText)

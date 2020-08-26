@@ -1,0 +1,46 @@
+Lets parse the incoming requests and get the data that is part of the request because that data should be whatever we entered in the input field of the form. 
+
+There is no data property on the request object. Instead the incoming data is basically sent as a stream of data.
+A stream is basically an ongoing process, the request is simply read by node in chunks, in multiple parts and in the end at some point of time it is done. 
+This is done so we can start working on this, on the individual chunks without having to wait for the full request being read. 
+For example uploading a file can take long, and streaming that data could allow us to start writing to the disk right away while the data is still coming in so that you don't have to wait for the file to be fully uploaded to then do something with it. 
+
+The problem is with your code, you can't arbitrarily try to work with these chunks. Instead to organize these incoming chunks, you use a so-called buffer, a buffer is like a bus stop.
+If you consider buses, they're always driving but for users or customers to work with them, to climb on the bus and leave the bus you need bus stops and this is basically what a buffer is.
+A buffer is a construct which allows you to hold multiple chunks and work with them before they are released once you're done and you work with that buffer. 
+
+When receiving a posted message before sending the response and before writing to the file, we want to get our request data, and we do this by going to our request and registering an event listener.
+Node uses these heavily. For create server, it implicitly creates one for us. We will do this on our own by using the on() method. 
+The on() method allows us to listen to certain events and the event we want to listen to here is the data event. 
+The IDE gives suggestions for which events we can listen to for a request. 
+The data event will be fired whenever a new chunk is ready to be read. The second argument is a listener, a function that should be executed for every data event.
+This listener will receive a chunk of data as an argument.
+The chunk is something we can work with inside of the function.
+We want to do something with this chunk to be able to interact with it.
+For this lets create a new constant above the event listener called body because we'll try to read the request body.
+The body should be an empty array.
+Inside of the handler function we will push a new chunk of data/element onto the array. 
+Note: the constant just means we can never reassign a new value, with push we're changing the object behind the body element, that body object. We're editing that data in that object not the value itself, not the object itself.  Think reference types and body being a pointer. 
+Node will execute the event handler as many times as it needs until it's done getting all the data out of the request. 
+Now we will need to create another event listener, the 'end' listener which will be fired once it's done parsing the incoming request's data or the incoming request in general.
+In this listener function we can now rely on all the chunks being read in and that are stored inside the body variable now. 
+
+To work with all of these chunks we will need to buffer them. If we are thinking about the bus concept, we get all these chunks and we now need to do something to be able to work with them, to basically have one place where the bus stops and we can interact with it. 
+We'll create a new constant parsedBody and we will set it to be a Buffer object, which is made available globally due to NodeJs, and we can then call a method called concat passing in the body. This will in the end create a new buffer and add all the chunks from inside the array my body to it.
+Then on the buffer object, parsedBody, we can call the toString method on it to convert it to a string. 
+So this is a utility method offered by nodejs where we do something to our buffered chunks, remember the bus is now waiting in the bus stop so to say, the buffer is our bus stop and now we do something with it, here we convert it to a string and this only works because I know that the incoming data will be text because the body of that request will be text.
+If it were a file, we would have to do something different.
+Now that we have parsedBody, we can work with it. 
+
+In the console we can see when we log the chunk, we can not understand it and we can't work with it but when we console log parsedBody we see that it is something we can work with. 
+The parsedBody will have a value where it has a key value pair coming from the input field with the name "message".
+
+Now and with that, we can now work with that and finally store the input in our file and we can do that
+here in request on, request on end to be precise by creating a new constant, message, taking the parsed body and splitting it on the equal
+sign and then taking the element with the index one which is the second element in the resulting array
+which is the element on the right of the equal sign. And now we can move write file sync into the end function,
+We don't want to execute it after the event listener declaration, 'end' because this will actually run before this function is called
+because above we just register a function to be called in the future, it's not executed immediately, remember node doesn't wait and pause, 
+it will not block the script execution, it just registers this as a to-be-executed action and then right away continues.
+So if we have something that depends on the incoming data, we have to move it into the event listener too so that it's also part of the to-be-executed code
+sometimes in the future and doesn't run too early. Now we can write message to the message.txt file.

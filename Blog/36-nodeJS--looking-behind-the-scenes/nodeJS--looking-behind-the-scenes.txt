@@ -1,0 +1,51 @@
+Nodejs uses only one single javascript thread, a thread is basically like a process in your operating system you could say.
+
+The question then is how is it able to handle multiple requests? If we're not able to assign a new thread for each request, they ultimately end up all
+running in one on the same thread and this of course poses a security question,
+can you then access data from request A, from request B and most importantly here at this point when
+we talk about performance, there of course also is the question of does this not mean that if the request A is still doing work, request B can't be handled?
+
+Performance:
+The event loop starts when the program starts. This is responsible for handling event callbacks.
+
+This is responsible for handling event callbacks though, so all these functions we basically added thus far in create server for example, the event loop
+is responsible for basically running that code when a certain event occurs you could say, it's aware
+of all these callbacks and basically well, execute said code. 
+That doesn't help us with our long taking file operation though and it's important to understand that this operation is not handled by the event
+loop, just the callback that we might have defined on write file once it's done, that code will be handled in event loop but that code will finish fast.
+So basically the event loop will only handle callbacks that contain fast finishing code.
+
+Instead our file system operations and a few others are sent to a worker pool which is also spun up and managed by nodejs automatically. 
+The worker pool is responsible for all the heavy lifting. The worker pool is kind of detached of the javascript code and it runs on different threads, it can spin up multiple threads, it's closely intervened with your operating system you're running the app on.
+In this regard it's detached from your code and the worker pool is doing all the heavy lifting.
+If you're doing something with a file, a worker from that pool will take care and will do its job totally detached from your code and the request and from the event loop. 
+The one connection to the event loop that we will have is that once the worker is done, for example once we read a file, it will trigger the callback for that read file operation
+and since the event loop is responsible for the events and the callbacks, this will in the end end up in the event loop. So nodejs will then execute the appropriate callback. 
+
+The event loop: 
+
+The event loop is a loop which is run or started by nodejs that keeps the nodejs process running.
+The event loop handles all the callbacks and it has a certain order in which it goes through the callbacks.
+This event loop that keeps looping. 
+1. At the beginning of each iteration it checks if there are any timer callbacks it should execute.
+i.e. setTimeout and setInterval. In nodejs you can set a timer where you pass in a method which should be run when the timer completes. 
+Nodejs is aware of this and executes any of these timer callbacks ude to a timer completing.
+2. Then it checks other pending callbacks, for example if we had written or read a file (any I/O related callbacks that were deferred, or network operations, but in general blocking operations), we might have a callback because that operation finished and it would then execute these callbacks.
+Note it's important to understand that nodejs will leave that phase at a certain point of time and that can also mean that if there are too many outstanding callbacks, it will continue its loop iteration and
+postpone these callbacks to the next iteration to execute them. After working on these open callbacks and hopefully finishing them all it will then enter a poll phase.
+3. A poll phase will look for new I/O events and try to execute their callbacks immediately if possible. If it is not possible it will defer the execution and register this as a pending callback which can be handled on the future loops.
+It will also check if there are any timer callbacks due to be executed and if that is the case, it will jump to that timer phase and execute them right away, so it can actually jump back there and not finish the iteration. Otherwise it'll continue and setImmediate callbacks will be exexcuted.
+4. Check phase will have setImmediate callbacks be executed. setImmediate is a bit like set timeout or set interval, just that it will execute immediately but always after any open callbacks have been executed.
+So they are typically faster than set timeout, with one millisecond of open duration let's say, but after the current cycle finished any open callbacks that were due to be handled in that current iteration.
+5. Close callbacks. The event loop will now execute all 'close' event callbacks. If there were any registered 'closed' events in our code those callbacks would be executed. Note: we can see that 'close' event callbacks are handled seperatly from the other phases.
+6. We might exit the program with process.exit but only if there are no remaining event handlers which are registered. This is what we mean by stating that if refs equal null.
+Internally nodejs keeps track of its open event listeners and it basically has a counter, references or refs, which it increments by 1 for every new callback is registered, every new event listener that is registered. So to say every new future work that it has to do and it reduces that counter by 1 for 
+every event listener that doesn't need anymore, every callback that it finished. Since we create the server with a listen method that listens to all incoming requests and this is an event that is never finished by default, and therefore we always have at least one reference and therefore we can't exit in a normal node webserver program. We can call the exit function as we saw.
+
+Event loop Overview:
+Timers <---------------------
+Pending callbacks <---      |
+Poll ----------------| &2 --|
+Check 
+Close callbacks
+

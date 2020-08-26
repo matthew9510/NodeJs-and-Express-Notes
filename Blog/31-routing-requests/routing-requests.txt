@@ -1,0 +1,16 @@
+Instead of printing the request to the console lets instead start writing a simple web server that does different things depending on which route we enter. 
+
+If a user hits the blank route i.e. '/' lets ask the user to give us some data that we can write to a file stored on the server.
+
+
+The form html element will have an action attribute, which is basically the url this request which will be generated automatically should be sent to.
+ Lets use '/message', and this will automatically target the host it's running on, so localhost:3000.
+ We then define the method, the http method that should be used. 
+ We are not using the method GET which is default when we enter a url. Here we are not entering a url, instead we want to send a so-called POST request.
+
+ A GET request is automatically send when you click a link or ENTER A URL. 
+ A post request has to be setup by you, by creating such a form or some otherways using javascript. 
+
+We will send a POST request to '/message'. Note that a form will automatically detect any inputs or related elements, and if we give these inputs a name, like we should, it will automatically put that name and value pair into the request it sends to our server. 
+
+Although it is not required to return a response, let us return res.end() inside the if(url ='/') block so that our anonymous doesn't continue further in the function. We must do this because once we call the end() method on the response we must not call any other res writes or res setHeaders, if we make it into a if statement we should return and exit out of the function.

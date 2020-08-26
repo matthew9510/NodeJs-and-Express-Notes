@@ -1,0 +1,80 @@
+Note: Javascript is weakly typed.
+
+Primitive data types: 
+    String
+    Number
+    Boolean
+    Undefined
+    Null
+    Symbol, which is an ES6 primitive data type  
+
+var name = "Matt"
+console.log("name"); // outputs "Matt"
+
+var secondName = name;
+console.log(secondName); // outputs "Matt"
+
+name = "Marc";
+console.log(secondName); // outputs "Matt"
+
+When we console secondName after updating the value of name we still see that it outputs "Matt". This is becuase primitive values are copied by value.
+
+So when we assign secondName variable with the name variable it copies the value and pastes it as the value for second name. 
+Note: that name variable has the value of "Marc" and secondName has the value "Matt". SecondName is not updated when name is updated with a new value.
+
+
+Reference types:
+
+var person = {
+    age: 23,
+    name = "Matt"
+}
+console.log(person);
+
+var secondPerson = person;
+console.log(secondPerson);
+
+person.name = "Marc";
+console.log(secondPerson); // Note: that the name property was updated with the updated value of person's property.
+
+We are console loggin the secondPerson, the object that wasn't changed and yet we see the changed name. This is something reference types do such as arrays or objects.
+
+
+Understanding the differences:
+
+Primitive types are stored on the Stack of the memory. Data stored on the stack can be accessed really quick but it can't hold that much info due to the space limitations. 
+Reference types are stored on the Heap of the memory. Unlike the stack the heap takes long to access but it can hold much more information and it's not as short living as the stack. Data on the heap tends to be bigger in size as well as tends to change dynamically.
+
+Variables stored on stack: New variables get pushed on top of a stack following the Last In First Out (LIFO) data structure. A stack is limited in space and therefore a good use for primitive data types. 
+Variables stored on the heap: Variables are stored in a place in memory where elements are not stored on top of each other like a stack, they are stored randomly in memory. That being said all of these variables will have an address in memory. 
+During the program execution we will have access to both the stack and the heap. 
+
+If we create a new object i.e. person. The object is created in the heap which stores the actual object and all of its propeties. We also have a pointer on the stack which stores the reference (the address) which stores this object in the heap. The variable on the stack stores a pointer, technically speaking the variable doesn't know the address of the place in memory where the object is stored which is the difference between storing things on the stack but the variable knows where the pointer lies on the stack. It knows the position of the pointer on the stack and the pointer in turn simply stores the address of the object in the heap.
+Now if we create a new Object called secondPerson with the value of first person object created, this creates a new pointer on the stack but this pointer points to the same place in memory as the first pointer did. 
+Unlike the previous example where we managed primitive types on the stack if we assign the value to a new variable the actual value of the object is not copied, the object is still the same (it's only one place in memory) but we do get a new pointer pointing to the same place. We have two different pointers which are stored in two different variables but both pointing to the same place in memory, aka the ssame value.
+   
+Something to note is that if we have a value on the heap and multiple variables on the stack pointing to that same place in memory and we change the value in one place then that value is changed everywhere. Opposed to if we change a primitive type we get real copies of those values.
+
+Something else to note is that if you create two objects with object literals with the same exact content you will create two unlinked objects with different addresses. So when you change one object's properties you are not changing the other object's properties because they are contained in two different addresses. For example:
+var personOne = { name:"Matt", age: 23 }
+var personTwo = { name:"Matt", age: 23 }
+personOne.name = "Marc"
+console.log(personTwo.name); // outputs "Matt"!
+
+If we want to create a new object and copy another object's values not reference to that object then we can use the following:
+var secondPerson = Object.assign({}, person); 
+The thing to note though is that if that object that also contains reference types, i.e. a object contains an array or another object we will then have our new object using the same address of that particular property and a change happens anywhere all objects will get that propigated change. Object assign doesn't create a deep clone, it doesn't create new objects of the properties, it just creates a new object and copies the existing properites addresses. so we could now have an old array in a new object. 
+You could manually copy all the properties if you want to get around this or you can use a library called Lodash which offers you a clone deep function which allows you to deeply clone a value which means to clone not just the object and then copy the properties but it also clones the properties to create new properties so that you are copying the nested reference data points addresses you're actually making a clone of those adreesses and assiging those values into a new address which your new object references to. 
+
+
+If you want to clone an array and not make a new pointer containing the same address you can use an array method called .slice(). Note that if you do not pass in any arguments to the slice method it will automatically clone the whole array 
+
+var numbers = [1,2,3,4]
+var numbersClone = numbers.slice()
+numbersClone.push(5)
+console.log(numbers); // Outputs [1,2,3,4]
+console.log(numbersClone); //Outputs [1,2,3,4,5]
+
+
+References:
+https://academind.com/learn/javascript/reference-vs-primitive-values/

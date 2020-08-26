@@ -1,0 +1,19 @@
+For extracting a body we had to listen to the data event and the end event and then created a buffer
+and converted it to a string. Express js will have a way to deal with handling or parsing that data 
+having easy integration of another package.
+
+We in general don't want to care about all these nitty gritty details, we want to focus on our code
+that defines our application, so the thing that really sets our application apart from other 
+applications, our unique selling point you could say and we do use a framework for this, for 
+all the heavy lifting. A framework is basically a set of helper functions but also a suite of tools
+and rules with which we work, so basically we have a clearly defined way or at least some outline 
+on how we should structure our application, our code and how we should work with that framework 
+to write clean code.
+
+The great thing about express is that it's highly flexible and actually doesn't add too much 
+functionalities out of the box but it gives you a certain way of building your application or of
+working with the incoming requests that make it highly extensible and therefore, there are dozens
+or hundreds and thousands of third party packages built for express specifically that you can then
+easily add to your node express application without having to configure a lot and this is
+probably the real strength of express and of course it also does add some nice features out of the
+box.
